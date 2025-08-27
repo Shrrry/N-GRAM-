@@ -1,2 +1,72 @@
 # N-GRAM 
-PREDICTING THE NEXT WORD
+#PREDICTING THE NEXT WORD
+
+#%% SPLITING WORDS AND APPENDING 
+def generate_ngrams(text,n):
+    words=text.split()
+    ngrams=[];
+    for i in range (len(words)- n +1):
+        ngrams.append(words[i:i+n])
+    return ngrams
+
+#%% SAMPLE DATA || TAKING INPUT AND UPDATING MY SAMPLE DATA
+sentence ="i am shrey from ml1 i am from machine learning i belong from kanpur i am nice from kanpur"
+words_list = sentence.split()
+unigrams=generate_ngrams(sentence,1)
+print ("unigrams:",[" ".join(u)for u in unigrams])
+sample=input()
+if sample not in words_list:
+    # Add the new word to our data
+    words_list.append(sample)
+    sentence = " ".join(words_list)
+sentence=sentence.lower()
+print (sentence)
+    
+#%% CONVERTING TO GRAMS
+bigrams=generate_ngrams(sentence,2)
+#print ("bigrams:",[" ".join(u)for u in bigrams])
+trigrams=generate_ngrams(sentence,3)
+#print ("unigrams:",[" ".join(u)for u in trigrams])
+
+
+#%% SPLITING THE GIVEN SENTENCE TO WORDS 
+next_word_counter={};
+sample_words = sample.split()
+all_words = sample.split()
+if len(all_words) >= 2:
+    last_two_words = all_words[-2:]  # Get last two words
+    word1, word2 = last_two_words
+    print(f"Using context: '{word1} {word2}'")
+
+#%% COUNTING OCCURENCE 
+
+if" "in sample:
+   for trigram in trigrams:
+        if trigram[0] == word1 and trigram[1] == word2: # If the first two words match
+            next_word = trigram[2]
+            # Count the frequency of this next word
+            if next_word in next_word_counter:
+                next_word_counter[next_word] += 1
+            else:
+                next_word_counter[next_word] = 1
+else:
+    for bigram in bigrams:
+        if bigram[0] == sample: # If the first word in the bigram matches the input
+            next_word = bigram[1]
+            # Count the frequency of this next word
+            if next_word in next_word_counter:
+                next_word_counter[next_word] += 1
+            else:
+                next_word_counter[next_word] = 1
+
+
+#%% NUMBER OF OCCURENCE
+ print("\nWords that follow 'i':", next_word_counter)
+
+#%%  MOST POSSIBLE WORD
+total_occurrences = sum(next_word_counter.values())
+total_occurrences
+probabilities = {word: count/total_occurrences for word, count in next_word_counter.items()}
+print( max(probabilities, key=probabilities.get))
+
+
